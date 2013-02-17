@@ -1,0 +1,101 @@
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/csvgrabber/!svn/ver/1/trunk/CsvGrabber
+END
+CsvGrabber.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/csvgrabber/!svn/ver/1/trunk/CsvGrabber/CsvGrabber.csproj
+END
+App.xaml
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/csvgrabber/!svn/ver/1/trunk/CsvGrabber/App.xaml
+END
+WPFUtils.cs
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/csvgrabber/!svn/ver/1/trunk/CsvGrabber/WPFUtils.cs
+END
+App.xaml.cs
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/csvgrabber/!svn/ver/1/trunk/CsvGrabber/App.xaml.cs
+END
+app.config
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/csvgrabber/!svn/ver/1/trunk/CsvGrabber/app.config
+END
+WPFConfiguration.cs
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/csvgrabber/!svn/ver/1/trunk/CsvGrabber/WPFConfiguration.cs
+END
+Converters.cs
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/csvgrabber/!svn/ver/1/trunk/CsvGrabber/Converters.cs
+END
+WinUnhandledException.xaml
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/csvgrabber/!svn/ver/1/trunk/CsvGrabber/WinUnhandledException.xaml
+END
+Options.cs
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/csvgrabber/!svn/ver/1/trunk/CsvGrabber/Options.cs
+END
+WinAddJob.xaml
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/csvgrabber/!svn/ver/1/trunk/CsvGrabber/WinAddJob.xaml
+END
+WinMain.xaml
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/csvgrabber/!svn/ver/1/trunk/CsvGrabber/WinMain.xaml
+END
+WinUnhandledException.xaml.cs
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/csvgrabber/!svn/ver/1/trunk/CsvGrabber/WinUnhandledException.xaml.cs
+END
+WinAddJob.xaml.cs
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/csvgrabber/!svn/ver/1/trunk/CsvGrabber/WinAddJob.xaml.cs
+END
+WinMain.xaml.cs
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/csvgrabber/!svn/ver/1/trunk/CsvGrabber/WinMain.xaml.cs
+END
+CsvGrabberCommands.cs
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/csvgrabber/!svn/ver/1/trunk/CsvGrabber/CsvGrabberCommands.cs
+END
+Grabber.cs
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/csvgrabber/!svn/ver/1/trunk/CsvGrabber/Grabber.cs
+END

@@ -1,0 +1,195 @@
+﻿<ResourceDictionary 
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+  xmlns:l49ui="clr-namespace:Lime49.UI;assembly=Lime49">
+  <Style TargetType="{x:Type TextBoxBase}" x:Key="{x:Type TextBox}">
+    <Setter Property="Margin" Value="2" />
+    <Setter Property="SnapsToDevicePixels" Value="True"/>
+    <Setter Property="OverridesDefaultStyle" Value="false"/>
+    <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+    <Setter Property="MinWidth" Value="80"/>
+    <Setter Property="MinHeight" Value="20"/>
+    <Setter Property="AllowDrop" Value="true"/>
+    <Setter Property="Background" Value="{StaticResource WindowBackgroundBrush}" />
+    <Setter Property="BorderBrush" Value="{StaticResource SolidBorderBrush}" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type TextBoxBase}">
+          <Border Name="Border" CornerRadius="1" Padding="2"
+                  Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+            <Border Name="ErrorContainer">
+                <Grid>
+                    <ScrollViewer Margin="0" x:Name="PART_ContentHost" Background="Transparent"/>
+                <TextBlock x:Name="watermark" Opacity="0.3"
+                           Text="{Binding (l49ui:WatermarkedControl.Watermark),RelativeSource={RelativeSource TemplatedParent}}" Padding="{TemplateBinding Padding}"
+                           TextAlignment="{Binding (l49ui:WatermarkedControl.WatermarkAlignment),RelativeSource={RelativeSource TemplatedParent}}" 
+                           TextTrimming="CharacterEllipsis" VerticalAlignment="Center" IsHitTestVisible="False" Visibility="Collapsed" />
+                </Grid>
+            </Border>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+              <Setter TargetName="Border" Property="Background" Value="{StaticResource DisabledBackgroundBrush}"/>
+              <!--Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource DisabledBackgroundBrush}"/-->
+              <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
+            </Trigger>
+            <Trigger Property="Validation.HasError" Value="true">
+                <Setter TargetName="PART_ContentHost" Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self},Path=(Validation.Errors)[0].ErrorContent}" />
+                <Setter TargetName="ErrorContainer" Property="Padding" Value="0,0,18,0" />
+                <Setter TargetName="ErrorContainer" Property="Background">
+                    <Setter.Value>
+                        <ImageBrush ImageSource="pack://application:,,,/Resources/images/error_16.png" Stretch="None" AlignmentX="Right" AlignmentY="Center" />
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                  <Condition Property="IsFocused" Value="False" />
+                  <Condition Property="TextBox.Text" Value="" />
+                </MultiTrigger.Conditions>
+                <Setter Property="Visibility" TargetName="watermark" Value="Visible" />
+            </MultiTrigger>
+            <!--Trigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="l49ui:WatermarkedControl.Watermark" Value="" />
+                </MultiTrigger.Conditions>
+                <Setter Property="Visibility" TargetName="watermark" Value="Visible" />
+            </MultiTrigger-->
+                    </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+    
+    <!--Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Grid>
+                        <ScrollViewer Margin="0" Padding="0" x:Name="PART_ContentHost" Background="{TemplateBinding Background}"/>
+                        <TextBlock x:Name="watermark"
+                                       
+                                       TextWrapping="Wrap"
+                                       Visibility="Visible" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsFocused" Value="False" />
+                                <Condition Property="Text" Value="" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Visibility" TargetName="watermark" Value="Visible" />
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style-->
+
+    <Style TargetType="{x:Type TextBox}" x:Key="SelectableTextBlock" BasedOn="{StaticResource {x:Type TextBox}}">
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="IsReadOnly" Value="true" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="false"/>
+        <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                        <ScrollViewer Margin="0" Padding="0" x:Name="PART_ContentHost" Background="{TemplateBinding Background}"/>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="false"/>
+                    <Condition Property="IsFocused" Value="false"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TextBox}">
+                            <TextBlock Text="{TemplateBinding Text}" TextWrapping="{TemplateBinding TextWrapping}" Padding="0" Margin="2,0,2,0" />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </MultiTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="{x:Type RichTextBox}"
+       BasedOn="{StaticResource {x:Type TextBox}}"
+       TargetType="{x:Type RichTextBox}">
+    <Style.Resources>
+      <Style x:Key="{x:Type FlowDocument}"
+           TargetType="{x:Type FlowDocument}">
+        <Setter Property="OverridesDefaultStyle"
+            Value="true"/>
+      </Style>
+    </Style.Resources>
+  </Style>
+
+  <Style x:Key="TransparentRichTextBox"
+       BasedOn="{StaticResource {x:Type TextBox}}"
+       TargetType="{x:Type RichTextBox}">
+    <Style.Resources>
+      <Style x:Key="{x:Type FlowDocument}"
+           TargetType="{x:Type FlowDocument}">
+        <Setter Property="OverridesDefaultStyle"
+            Value="true"/>
+      </Style>
+    </Style.Resources>
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ContentPresenter />
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style x:Key="{x:Type PasswordBox}" TargetType="{x:Type PasswordBox}">
+    <Setter Property="SnapsToDevicePixels" Value="true"/>
+    <Setter Property="OverridesDefaultStyle" Value="true"/>
+    <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+    <Setter Property="FontFamily" Value="Verdana"/>
+    <Setter Property="PasswordChar" Value="●"/>
+    <Setter Property="MinWidth" Value="120"/>
+    <Setter Property="MinHeight" Value="20"/>
+    <Setter Property="AllowDrop" Value="true"/>
+    <Setter Property="Margin" Value="2" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type PasswordBox}">
+          <Border 
+            Name="Border"
+            CornerRadius="1" 
+            Padding="2" 
+            Background="{StaticResource WindowBackgroundBrush}"
+            BorderBrush="{StaticResource SolidBorderBrush}"
+            BorderThickness="1" >
+            <ScrollViewer x:Name="PART_ContentHost" />
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+              <Setter TargetName="Border" Property="Background" Value="{StaticResource DisabledBackgroundBrush}"/>
+              <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource DisabledBackgroundBrush}"/>
+              <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</ResourceDictionary>

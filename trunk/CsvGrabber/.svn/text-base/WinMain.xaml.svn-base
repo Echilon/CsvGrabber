@@ -1,0 +1,155 @@
+﻿<Window x:Class="CsvGrabber.WinMain"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:l49ui="clr-namespace:Lime49.UI;assembly=Lime49" 
+    xmlns:loc="clr-namespace:CsvGrabber" 
+    xmlns:l49wpf="clr-namespace:Lime49.WPF;assembly=Lime49" 
+    xmlns:props="clr-namespace:CsvGrabber.Properties" xmlns:conv="clr-namespace:CsvGrabber.Converters" Loaded="Window_Loaded"
+    Title="CSV Grabber" Height="600" Width="500">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Delete" Executed="DeleteUrl" CanExecute="CanDeleteUrl"/>
+        <CommandBinding Command="ApplicationCommands.Properties" Executed="EditUrl" CanExecute="CanDeleteUrl"/>
+        <CommandBinding Command="ApplicationCommands.New" Executed="AddUrl" CanExecute="CanAddUrl"/>
+        <CommandBinding Command="ApplicationCommands.Open" Executed="Browse" CanExecute="CanAlwaysExecute"/>
+        <CommandBinding Command="ApplicationCommands.Help" Executed="ShowHelp" CanExecute="CanAlwaysExecute"/>
+        <!--<CommandBinding Command="EditingCommands.Delete" Executed="ClearAllUrls" CanExecute="CanClearAllUrls"/>-->
+        <CommandBinding Command="NavigationCommands.Refresh" Executed="RefreshScheduledGrabs" CanExecute="CanRefreshSchedule"/>
+        <CommandBinding Command="MediaCommands.Play" Executed="StartGrabbing" CanExecute="CanStartGrabbing"/>
+        <CommandBinding Command="MediaCommands.Pause" Executed="PauseGrabbing" CanExecute="CanPauseGrabbing"/>
+        <CommandBinding Command="MediaCommands.Stop" Executed="StopGrabbing" CanExecute="CanStopGrabbing"/>
+        
+        <CommandBinding Command="loc:CsvGrabberCommands.CopyUrl" Executed="CopyUrl" CanExecute="IsUrlSelected"/>
+        <CommandBinding Command="loc:CsvGrabberCommands.Options" Executed="ShowOptions"/>
+    </Window.CommandBindings>
+    <Window.Resources>
+        <conv:TemplateMenuConverter x:Key="TemplateMenuConverter"/>
+        <BitmapImage x:Key="add_16" UriSource="pack://application:,,,/Resources/Images/add_16.png" x:Shared="False" />
+        <BitmapImage x:Key="copySrc_16" UriSource="pack://application:,,,/Resources/Images/copy_16.png" x:Shared="False" />
+        <Image x:Key="copy_16" Source="{StaticResource copySrc_16}" x:Shared="False" />
+        <BitmapImage x:Key="deleteSrc_16" UriSource="pack://application:,,,/Resources/Images/delete_16.png" x:Shared="False" />
+        <Image x:Key="delete_16" Source="{StaticResource deleteSrc_16}" x:Shared="False" />
+        <BitmapImage x:Key="editSrc_16" UriSource="pack://application:,,,/Resources/Images/edit_16.png" x:Shared="False" />
+        <Image x:Key="edit_16" Source="{StaticResource editSrc_16}" x:Shared="False" />
+        <BitmapImage x:Key="eraser_16" UriSource="pack://application:,,,/Resources/Images/eraser_16.png" x:Shared="False" />
+        <BitmapImage x:Key="refresh_16" UriSource="pack://application:,,,/Resources/Images/refresh_16.png" x:Shared="False" />
+        <BitmapImage x:Key="help_16" UriSource="pack://application:,,,/Resources/Images/question_16.png" x:Shared="False" />
+        <ObjectDataProvider x:Key="urlsProvider"/>
+        <ObjectDataProvider x:Key="templatesProvider" />
+        <props:Settings x:Key="settings"/>
+    </Window.Resources>
+    <Grid Grid.IsSharedSizeScope="true">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" MinHeight="120" />
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Header="File">
+                <MenuItem Header="Start Grabbing" Command="MediaCommands.Play"/>
+                <MenuItem Header="Pause Grabbing" Command="MediaCommands.Pause"/>
+                <MenuItem Header="Abort Grabbing" Command="MediaCommands.Stop"/>
+                <Separator/>
+                <MenuItem Header="Exit" Command="ApplicationCommands.Close"/>
+            </MenuItem>
+            <!--MenuItem Header="URLs">
+                <MenuItem Header="Add URL" Command="ApplicationCommands.New" />
+                <MenuItem Header="Delete URL" Command="ApplicationCommands.Delete" />
+            </MenuItem-->
+            <MenuItem Header="Tools">
+                <MenuItem Header="Options" Command="loc:CsvGrabberCommands.Options" />
+            </MenuItem>
+        </Menu>
+        <ToolBar Grid.Row="1">
+            <l49ui:ImageButton Grid.Column="0" Command="MediaCommands.Play" Text="Start" ToolTip="Start Grabbing" ImageLocation="Left" Image="pack://application:,,,/Resources/images/play_16.png"/>
+            <l49ui:ImageButton Grid.Column="0" Command="MediaCommands.Pause" Text="Pause" ToolTip="Pause Grabbing" ImageLocation="Left" Image="pack://application:,,,/Resources/images/pause_16.png"/>
+            <l49ui:ImageButton Grid.Column="0" Command="MediaCommands.Stop" Text="Abort" ToolTip="Abort Grabbing" ImageLocation="Left" Image="pack://application:,,,/Resources/images/stop_16.png"/>
+            <Separator/>
+        </ToolBar>
+        <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Header="Jobs to Process">
+            <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <ListBox Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" x:Name="lstUrls" SelectionMode="Single" ItemTemplate="{StaticResource scheduledJobTemplate}" 
+                         ItemsSource="{Binding Collection,Source={StaticResource urlsProvider}}" MouseDoubleClick="lstUrls_MouseDoubleClick">
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Copy URL" Command="loc:CsvGrabberCommands.CopyUrl" ToolTip="Copy URL to clipboard" Icon="{StaticResource copy_16}" 
+                                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
+                            <MenuItem Header="Edit" Command="ApplicationCommands.Properties" ToolTip="Edit job" Icon="{StaticResource edit_16}" 
+                                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
+                            <MenuItem Header="Delete" Command="ApplicationCommands.Delete" Icon="{StaticResource delete_16}" />
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                </ListBox>
+
+                <l49ui:ImageButton Grid.Row="0" Grid.Column="1" MinWidth="18" Command="ApplicationCommands.Properties" Image="{StaticResource editSrc_16}" ShowText="False" 
+                    Text="Edit job" ToolTip="Edit selected job" Margin="2" />
+                <l49ui:ImageButton Grid.Row="1" Grid.Column="1" MinWidth="18" Command="ApplicationCommands.Delete" Image="{StaticResource deleteSrc_16}" ShowText="False" 
+                    Text="Delete job" ToolTip="Delete selected job" Margin="2" />
+
+                <!--<TextBox Grid.Row="3" Grid.Column="0" x:Name="txtUrl" ToolTip="URL to add" KeyDown="txtUrl_KeyDown"/>-->
+                <l49ui:SplitButton Style="{StaticResource SplitButton}" MainButtonLocation="Left">
+                    <l49ui:SplitButton.Button>
+                        <l49ui:ImageButton Grid.Row="2" Grid.Column="1" MinWidth="18" Command="ApplicationCommands.New" Image="{StaticResource add_16}" ShowText="False" 
+                            Text="Add job" ToolTip="Add Job" Margin="2" />
+                    </l49ui:SplitButton.Button>
+                    <l49ui:SplitButton.MenuButton>
+                        <l49ui:MenuButton MenuLocation="Bottom">
+                            <l49ui:MenuButton.Menu>
+                                <ContextMenu ItemsSource="{Binding Source={StaticResource templatesProvider},Converter={StaticResource TemplateMenuConverter}}" x:Name="ctxTemplates">
+                                    
+                                </ContextMenu>
+                            </l49ui:MenuButton.Menu>
+                        </l49ui:MenuButton>
+                    </l49ui:SplitButton.MenuButton>
+                </l49ui:SplitButton>
+                <l49ui:ImageButton Grid.Row="3" Grid.Column="1" MinWidth="18" Command="NavigationCommands.Refresh" Image="{StaticResource refresh_16}" ShowText="False" 
+                    Text="Refresh job list" ToolTip="Refresh jobs" Margin="2" />
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Row="3" Grid.Column="0" x:Name="grpOutput" Header="Output Settings" Margin="6,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="labels"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <CheckBox x:Name="chkLogFile" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Content="Log to Directory" IsChecked="{Binding Default.LogToFile,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                <!--TextBox x:Name="txtFilePath" Grid.Row="0" Grid.Column="1"  ToolTip="Path to the output file"/-->
+                <ComboBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="cboFileName" IsEditable="True" ToolTip="Path to the output directory" Margin="0,2,2,2" IsEnabled="{Binding IsChecked,ElementName=chkLogFile}"/>
+                <Button x:Name="btnBrowse" Grid.Row="1" Grid.Column="2" MinWidth="70" Command="ApplicationCommands.Open" CommandTarget="{Binding ElementName=cboFileName}" Content="Browse..." IsEnabled="{Binding IsChecked,ElementName=chkLogFile}" />
+
+                <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" x:Name="chkIncludeResponse" Content="Include raw response for each match" IsChecked="{Binding Default.LogRawResponse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsChecked,ElementName=chkLogFile}" />
+                <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" x:Name="chkAppend" Content="Append to existing file" IsChecked="{Binding Default.AppendLogFile,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsChecked,ElementName=chkLogFile}" />
+
+                <CheckBox x:Name="chkLogDatabase" Grid.Row="4" Grid.Column="0" Content="Log to Database" IsChecked="{Binding Default.LogToDatabase,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                <!--TextBox x:Name="txtFilePath" Grid.Row="0" Grid.Column="1"  ToolTip="Path to the output file"/-->
+                <ComboBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" x:Name="cboDbPath" ToolTip="Path to the database file" Margin="0,2,2,2" IsEnabled="{Binding IsChecked,ElementName=chkLogDatabase}"/>
+                <Button x:Name="btnBrowseDatabase" Grid.Row="5" Grid.Column="2" MinWidth="70" Command="ApplicationCommands.Open" CommandTarget="{Binding ElementName=cboDbPath}" Content="Browse..." IsEnabled="{Binding IsChecked,ElementName=chkLogDatabase}" />
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Header="Log" Margin="6,0">
+            <RichTextBox x:Name="rtbLog" IsReadOnly="True" VerticalScrollBarVisibility="Visible"/>
+        </GroupBox>
+    </Grid>
+</Window>

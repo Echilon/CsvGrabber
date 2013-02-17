@@ -1,0 +1,109 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+
+namespace CsvGrabber.Core
+{
+    public class GrabTemplate:INotifyPropertyChanged
+    {
+        private string _urlFormatString,
+                       _name,
+                       _description,
+                       _userData;
+        private int _templateID;
+        private GrabEventArgs _grabParams;
+
+        public int TemplateID {
+            get { return _templateID; }
+            set {
+                _templateID = value;
+                OnPropertyChanged("TemplateID");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the template name.
+        /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
+        public string Name {
+            get { return _name; }
+            set {
+                _name = value;
+                OnPropertyChanged("Name");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the description, used to inform the user.
+        /// </summary>
+        /// <value>
+        /// The description.
+        /// </value>
+        public string Description {
+            get { return _description; }
+            set {
+                _description = value;
+                OnPropertyChanged("Description");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the string to use when formatting the URL.
+        /// </summary>
+        /// <value>
+        /// The string to use when formatting the URL.
+        /// </value>
+        public string UrlFormatString {
+            get { return _urlFormatString; }
+            set {
+                _urlFormatString = value;
+                OnPropertyChanged("UrlFormatString");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the string to use when formatting the URL.
+        /// </summary>
+        /// <value>
+        /// The string to use when formatting the URL.
+        /// </value>
+        public string UserData {
+            get { return _userData; }
+            set {
+                _userData = value;
+                OnPropertyChanged("UserData");
+            }
+        }
+
+        public GrabEventArgs GrabParameters {
+            get { return _grabParams; }
+            set {
+                _grabParams = value;
+                OnPropertyChanged("GrabParameters");
+            }
+        }
+
+        public GrabTemplate()
+        {
+            GrabParameters = new GrabEventArgs();
+        }
+
+        public string GetScrapeUrl()
+        {
+            return string.Format(UrlFormatString, UserData);
+        }
+        //todo: props for setting grabbing options - scrape/regex etc
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string strPropertyName) {
+            if (PropertyChanged != null) {
+                PropertyChanged(this, new PropertyChangedEventArgs(strPropertyName));
+            }
+        }
+    }
+}

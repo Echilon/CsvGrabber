@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvGrabber", "CsvGrabber\CsvGrabber.csproj", "{EB2738A8-B0A7-43F8-8C3E-BA072474B56A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvGrabber.Core", "CsvGraabber.Core\CsvGrabber.Core.csproj", "{74D2E5AE-EF4D-44B9-BCF3-7C2E7423CE77}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvGrabber.DAL", "CsvGrabber.DAL\CsvGrabber.DAL.csproj", "{7BA108C5-1460-487C-8D03-0483EE50C887}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EB2738A8-B0A7-43F8-8C3E-BA072474B56A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB2738A8-B0A7-43F8-8C3E-BA072474B56A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB2738A8-B0A7-43F8-8C3E-BA072474B56A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB2738A8-B0A7-43F8-8C3E-BA072474B56A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74D2E5AE-EF4D-44B9-BCF3-7C2E7423CE77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74D2E5AE-EF4D-44B9-BCF3-7C2E7423CE77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74D2E5AE-EF4D-44B9-BCF3-7C2E7423CE77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74D2E5AE-EF4D-44B9-BCF3-7C2E7423CE77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BA108C5-1460-487C-8D03-0483EE50C887}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BA108C5-1460-487C-8D03-0483EE50C887}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BA108C5-1460-487C-8D03-0483EE50C887}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BA108C5-1460-487C-8D03-0483EE50C887}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

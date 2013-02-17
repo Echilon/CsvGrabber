@@ -1,0 +1,37 @@
+﻿<Application x:Class="CsvGrabber.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="skin\Shared.xaml"/>
+                <ResourceDictionary Source="skin\Expander.xaml"/>
+                <ResourceDictionary Source="skin\Label.xaml"/>
+                <ResourceDictionary Source="skin\TextBlock.xaml" />
+                <ResourceDictionary Source="skin\ListBox.xaml"/>
+                <ResourceDictionary Source="skin\ListView.xaml"/>
+                <ResourceDictionary Source="skin\Menu.xaml"/>
+                <ResourceDictionary Source="skin\ProgressBar.xaml"/>
+                <ResourceDictionary Source="skin\ResizeGrip.xaml"/>
+                <ResourceDictionary Source="skin\ScrollBar.xaml"/>
+                <ResourceDictionary Source="skin\ScrollViewer.xaml"/>
+                <ResourceDictionary Source="skin\Slider.xaml"/>
+                <ResourceDictionary Source="skin\Separator.xaml"/>
+                <ResourceDictionary Source="skin\StatusBar.xaml"/>
+                <ResourceDictionary Source="skin\TextBox.xaml"/>
+                <ResourceDictionary Source="skin\ToolBar.xaml"/>
+                <ResourceDictionary Source="skin\ToolTip.xaml"/>
+                <ResourceDictionary Source="skin\TreeView.xaml"/>
+                <ResourceDictionary Source="skin\Window.xaml"/>
+                <ResourceDictionary Source="skin\CheckBox.xaml"/>
+                <ResourceDictionary Source="skin\ComboBox.xaml"/>
+                <ResourceDictionary Source="skin\Button.xaml"/>
+                <ResourceDictionary Source="skin\TabControl.xaml"/>
+                <ResourceDictionary Source="skin\RadioButton.xaml"/>
+                <ResourceDictionary Source="skin\NavigationWindow.xaml"/>
+                <ResourceDictionary Source="skin\Frame.xaml"/>
+                <ResourceDictionary Source="skin\GroupBox.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

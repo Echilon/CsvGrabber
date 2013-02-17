@@ -1,0 +1,479 @@
+<ResourceDictionary 
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:loc="clr-namespace:Lime49.UI;assembly=Lime49">
+
+  <Style x:Key="ButtonFocusVisual">
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate>
+          <Border>
+            <Rectangle Margin="2" StrokeThickness="1" Stroke="#60000000" StrokeDashArray="1 2"/>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style TargetType="Button">
+    <Setter Property="Margin" Value="2" />
+    <Setter Property="SnapsToDevicePixels" Value="true"/>
+    <Setter Property="OverridesDefaultStyle" Value="true"/>
+    <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
+    <Setter Property="MinHeight" Value="10"/>
+    <Setter Property="MinWidth" Value="10"/>
+    <Setter Property="Foreground" Value="{StaticResource NormalForeground}"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="Button">
+          <Border 
+            x:Name="Border"  
+            CornerRadius="1" 
+            BorderThickness="1"
+            Background="{DynamicResource NormalBrush}"
+            BorderBrush="{DynamicResource NormalBorderBrush}">
+            <ContentPresenter 
+              Margin="2"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              RecognizesAccessKey="True"/>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsKeyboardFocused" Value="true">
+              <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource DefaultedBorderBrush}" />
+            </Trigger>
+            <Trigger Property="IsDefaulted" Value="true">
+              <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource DefaultedBorderBrush}" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="true">
+              <Setter TargetName="Border" Property="Background" Value="{DynamicResource DarkBrush}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+              <Setter TargetName="Border" Property="Background" Value="{DynamicResource PressedBrush}" />
+              <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource PressedBorderBrush}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+              <Setter TargetName="Border" Property="Background" Value="{DynamicResource DisabledBackgroundBrush}" />
+              <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource DisabledBorderBrush}" />
+              <Setter Property="Foreground" Value="{DynamicResource DisabledForegroundBrush}"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  
+  <Style TargetType="{x:Type loc:ImageButton}" x:Key="{x:Type loc:ImageButton}">
+    <Setter Property="Margin" Value="4,2" />
+    <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
+    <Setter Property="VerticalAlignment" Value="Stretch" />
+    <Setter Property="VerticalContentAlignment" Value="Top" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="SnapsToDevicePixels" Value="True" />
+    <Setter Property="ShowText" Value="True" />
+    <Setter Property="ImageLocation" Value="Top" />
+    <Setter Property="Foreground" Value="{DynamicResource NormalForeground}"/>
+    <Setter Property="Background" Value="{DynamicResource NormalBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}"/>
+    <Setter Property="Template">
+        <Setter.Value>
+            <ControlTemplate TargetType="{x:Type loc:ImageButton}">
+                <Border x:Name="Border" Padding="3" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}"
+                        CornerRadius="1" BorderThickness="1" ToolTip="{TemplateBinding ToolTip}" ToolTipService.ShowOnDisabled="True">
+                    <DockPanel x:Name="Container" HorizontalAlignment="{TemplateBinding HorizontalAlignment}" VerticalAlignment="Center">
+                        <Image x:Name="PART_img" Source="{TemplateBinding Image}" Stretch="None" SnapsToDevicePixels="True"
+                               IsEnabled="{TemplateBinding IsEnabled}" IsHitTestVisible="False" />
+                        <TextBlock x:Name="PART_text" Text="{TemplateBinding Text}" IsEnabled="{TemplateBinding IsEnabled}"
+                                   TextTrimming="CharacterEllipsis" TextWrapping="Wrap" MaxWidth="{TemplateBinding MaxWidth}" MaxHeight="{TemplateBinding MaxWidth}"
+                                   TextAlignment="{TemplateBinding HorizontalAlignment}" />
+                    </DockPanel>
+                </Border>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="ImageLocation">
+                        <Trigger.Value>
+                            <PlacementMode>Left</PlacementMode>
+                        </Trigger.Value>
+                        <Setter TargetName="PART_img" Property="DockPanel.Dock" Value="Left" />
+                        <Setter TargetName="PART_text" Property="DockPanel.Dock" Value="Right" />
+                        <Setter TargetName="PART_text" Property="Margin" Value="2,0,0,0" />
+                    </Trigger>
+                    <Trigger Property="ImageLocation">
+                        <Trigger.Value>
+                            <PlacementMode>Top</PlacementMode>
+                        </Trigger.Value>
+                        <Setter TargetName="PART_img" Property="DockPanel.Dock" Value="Top" />
+                        <Setter TargetName="PART_text" Property="DockPanel.Dock" Value="Bottom" />
+                        <Setter TargetName="PART_text" Property="Margin" Value="0,2,0,0" />
+                    </Trigger>
+                    <Trigger Property="ImageLocation">
+                        <Trigger.Value>
+                            <PlacementMode>Right</PlacementMode>
+                        </Trigger.Value>
+                        <Setter TargetName="PART_img" Property="DockPanel.Dock" Value="Right" />
+                        <Setter TargetName="PART_text" Property="DockPanel.Dock" Value="Left" />
+                        <Setter TargetName="PART_text" Property="Margin" Value="0,0,2,0" />
+                    </Trigger>
+                    <Trigger Property="ImageLocation">
+                        <Trigger.Value>
+                            <PlacementMode>Bottom</PlacementMode>
+                        </Trigger.Value>
+                        <Setter TargetName="PART_img" Property="DockPanel.Dock" Value="Bottom" />
+                        <Setter TargetName="PART_text" Property="DockPanel.Dock" Value="Top" />
+                        <Setter TargetName="PART_text" Property="Margin" Value="0,0,0,2" />
+                    </Trigger>
+                    <Trigger Property="ShowText" Value="false">
+                      <Setter TargetName="PART_text" Property="Visibility" Value="Collapsed" />
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter TargetName="Border" Property="Background" Value="{DynamicResource DisabledBackgroundBrush}" />
+                        <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource DisabledBorderBrush}" />
+                        <!--Setter TargetName="PART_img" Property="Opacity" Value="0.5" /-->
+                        <Setter TargetName="Container" Property="OpacityMask" Value="{StaticResource disabledMask}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource DisabledForegroundBrush}"/>
+                    </Trigger>
+                    <Trigger Property="IsKeyboardFocused" Value="true">
+                      <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource DefaultedBorderBrush}" />
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="true">
+                      <Setter TargetName="Border" Property="Background" Value="{DynamicResource DarkBrush}" />
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="true">
+                      <Setter TargetName="Border" Property="Background" Value="{DynamicResource PressedBrush}" />
+                      <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource PressedBorderBrush}" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+        </Setter.Value>
+    </Setter>
+  </Style>
+
+    <Style x:Key="LiteImageButton" TargetType="{x:Type loc:ImageButton}" BasedOn="{StaticResource {x:Type loc:ImageButton}}">
+        <Setter Property="Margin" Value="1"/>
+        <Setter Property="Padding" Value="1"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type loc:ImageButton}">
+                    <Grid>
+                        <Border x:Name="Border" Padding="1" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" Opacity="0.4"
+                            CornerRadius="1" BorderThickness="1" ToolTip="{TemplateBinding ToolTip}" ToolTipService.ShowOnDisabled="True"/>
+                        <DockPanel Margin="2" HorizontalAlignment="{TemplateBinding HorizontalAlignment}" VerticalAlignment="Center">
+                            <Image x:Name="PART_img" Source="{TemplateBinding Image}" Stretch="None" SnapsToDevicePixels="True"
+                               IsEnabled="{TemplateBinding IsEnabled}" IsHitTestVisible="False" />
+                            <TextBlock x:Name="PART_text" Text="{TemplateBinding Text}" IsEnabled="{TemplateBinding IsEnabled}"
+                                   TextTrimming="CharacterEllipsis" TextWrapping="Wrap" MaxWidth="{TemplateBinding MaxWidth}" MaxHeight="{TemplateBinding MaxWidth}"
+                                   TextAlignment="{TemplateBinding HorizontalAlignment}" />
+                        </DockPanel>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="ImageLocation">
+                            <Trigger.Value>
+                                <PlacementMode>Left</PlacementMode>
+                            </Trigger.Value>
+                            <Setter TargetName="PART_img" Property="DockPanel.Dock" Value="Left" />
+                            <Setter TargetName="PART_text" Property="DockPanel.Dock" Value="Right" />
+                            <Setter TargetName="PART_text" Property="Margin" Value="2,0,0,0" />
+                        </Trigger>
+                        <Trigger Property="ImageLocation">
+                            <Trigger.Value>
+                                <PlacementMode>Top</PlacementMode>
+                            </Trigger.Value>
+                            <Setter TargetName="PART_img" Property="DockPanel.Dock" Value="Top" />
+                            <Setter TargetName="PART_text" Property="DockPanel.Dock" Value="Bottom" />
+                            <Setter TargetName="PART_text" Property="Margin" Value="0,2,0,0" />
+                        </Trigger>
+                        <Trigger Property="ImageLocation">
+                            <Trigger.Value>
+                                <PlacementMode>Right</PlacementMode>
+                            </Trigger.Value>
+                            <Setter TargetName="PART_img" Property="DockPanel.Dock" Value="Right" />
+                            <Setter TargetName="PART_text" Property="DockPanel.Dock" Value="Left" />
+                            <Setter TargetName="PART_text" Property="Margin" Value="0,0,2,0" />
+                        </Trigger>
+                        <Trigger Property="ImageLocation">
+                            <Trigger.Value>
+                                <PlacementMode>Bottom</PlacementMode>
+                            </Trigger.Value>
+                            <Setter TargetName="PART_img" Property="DockPanel.Dock" Value="Bottom" />
+                            <Setter TargetName="PART_text" Property="DockPanel.Dock" Value="Top" />
+                            <Setter TargetName="PART_text" Property="Margin" Value="0,0,0,2" />
+                        </Trigger>
+                        <Trigger Property="ShowText" Value="false">
+                            <Setter TargetName="PART_text" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource DisabledBackgroundBrush}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource DisabledBorderBrush}" />
+                            <Setter TargetName="PART_img" Property="Opacity" Value="0.5" />
+                            <Setter Property="Foreground" Value="{DynamicResource DisabledForegroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="true">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource DefaultedBorderBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource DarkBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource PressedBrush}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource PressedBorderBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+  
+  <Style x:Key="SplitButton" TargetType="{x:Type loc:SplitButton}">
+    <Setter Property="MainButtonLocation" Value="Left" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="SnapsToDevicePixels" Value="True" />
+    <Setter Property="Foreground" Value="{StaticResource NormalForeground}"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type loc:SplitButton}">
+                <DockPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <ContentPresenter x:Name="PART_button" Content="{TemplateBinding Button}"/>
+                    <ContentPresenter x:Name="PART_menuButton" Content="{TemplateBinding MenuButton}" />
+                </DockPanel>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="MainButtonLocation">
+                        <Trigger.Value>
+                            <PlacementMode>Left</PlacementMode>
+                        </Trigger.Value>
+                        <Setter TargetName="PART_button" Property="DockPanel.Dock" Value="Left" />
+                        <Setter TargetName="PART_menuButton" Property="DockPanel.Dock" Value="Right" />
+                        <Setter TargetName="PART_menuButton" Property="Margin" Value="1,0,0,0" />
+                    </Trigger>
+                    <Trigger Property="MainButtonLocation">
+                        <Trigger.Value>
+                            <PlacementMode>Top</PlacementMode>
+                        </Trigger.Value>
+                        <Setter TargetName="PART_button" Property="DockPanel.Dock" Value="Top" />
+                        <Setter TargetName="PART_menuButton" Property="DockPanel.Dock" Value="Bottom" />
+                        <Setter TargetName="PART_menuButton" Property="Margin" Value="0,1,0,0" />
+                    </Trigger>
+                    <Trigger Property="MainButtonLocation">
+                        <Trigger.Value>
+                            <PlacementMode>Right</PlacementMode>
+                        </Trigger.Value>
+                        <Setter TargetName="PART_button" Property="DockPanel.Dock" Value="Right" />
+                        <Setter TargetName="PART_menuButton" Property="DockPanel.Dock" Value="Left" />
+                        <Setter TargetName="PART_menuButton" Property="Margin" Value="0,0,1,0" />
+                    </Trigger>
+                    <Trigger Property="MainButtonLocation">
+                        <Trigger.Value>
+                            <PlacementMode>Bottom</PlacementMode>
+                        </Trigger.Value>
+                        <Setter TargetName="PART_button" Property="DockPanel.Dock" Value="Bottom" />
+                        <Setter TargetName="PART_menuButton" Property="DockPanel.Dock" Value="Top" />
+                        <Setter TargetName="PART_menuButton" Property="Margin" Value="0,0,0,1" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  
+    <Style x:Key="{x:Type loc:MenuButton}" TargetType="{x:Type loc:MenuButton}">
+        <!--Margin="1,-3,-3,-3"-->
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="IsHitTestVisible" Value="True" />
+        <Setter Property="MenuLocation" Value="Bottom" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Foreground" Value="{StaticResource NormalForeground}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type loc:MenuButton}">
+                    <Border x:Name="Border" CornerRadius="1" BorderThickness="1" Background="Transparent" Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}"
+                            VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsHitTestVisible="True">
+                        <DockPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="1">
+                          <Path x:Name="PART_arrow" DockPanel.Dock="Top" Data="M0,0L3,3 6,0z" Margin="0,1,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                Stroke="{DynamicResource GlyphBrush}" Fill="{DynamicResource GlyphBrush}" />
+                          <ContentPresenter DockPanel.Dock="Top" RecognizesAccessKey="True" />
+                        </DockPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="MenuLocation">
+                          <Trigger.Value>
+                            <PlacementMode>Top</PlacementMode>
+                          </Trigger.Value>
+                          <Setter TargetName="PART_arrow" Property="Data" Value="M0,3L6,3 3,0z" />
+                          <Setter Property="Padding" Value="3,0"/>
+                        </Trigger>
+                        <Trigger Property="MenuLocation">
+                          <Trigger.Value>
+                            <PlacementMode>Bottom</PlacementMode>
+                          </Trigger.Value>
+                          <Setter TargetName="PART_arrow" Property="Data" Value="M0,0L3,3 6,0z" />
+                          <Setter Property="Padding" Value="3,0"/>
+                        </Trigger>
+                        <Trigger Property="MenuLocation">
+                          <Trigger.Value>
+                            <PlacementMode>Left</PlacementMode>
+                          </Trigger.Value>
+                          <Setter TargetName="PART_arrow" Property="Data" Value="M3,0L3,6 0,3z" />
+                          <Setter Property="Padding" Value="0,3"/>
+                        </Trigger>
+                        <Trigger Property="MenuLocation">
+                          <Trigger.Value>
+                            <PlacementMode>Right</PlacementMode>
+                          </Trigger.Value>
+                          <Setter TargetName="PART_arrow" Property="Data" Value="M0,0L0,6 3,3z" />
+                          <Setter Property="Padding" Value="0,3"/>
+                        </Trigger>
+                        <Trigger Property="AlwaysShowBorder" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource NormalBrush}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}" />
+                        </Trigger>
+                        <Trigger Property="ShowArrow" Value="False">
+                            <Setter TargetName="PART_arrow" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="PART_arrow" Property="Stroke" Value="{DynamicResource DisabledBackgroundBrush}" />
+                            <Setter TargetName="PART_arrow" Property="Stroke" Value="{DynamicResource DisabledBorderBrush}" />
+                            <Setter Property="Foreground" Value="{DynamicResource DisabledForegroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="true">
+                          <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource DefaultedBorderBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                          <Setter TargetName="Border" Property="Background" Value="{DynamicResource NormalBrush}" />
+                          <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                          <Setter TargetName="Border" Property="Background" Value="{DynamicResource PressedBrush}" />
+                          <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource PressedBorderBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+  
+    <Style x:Key="ToolBarButton" TargetType="{x:Type loc:ImageButton}" BasedOn="{StaticResource {x:Type loc:ImageButton}}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type loc:ImageButton}">
+                    <Border x:Name="Border" Padding="3"
+                            CornerRadius="1" BorderThickness="1">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Image x:Name="PART_img" Source="{TemplateBinding Image}" Stretch="None" SnapsToDevicePixels="True"
+                                   IsEnabled="{TemplateBinding IsEnabled}" />
+                            <TextBlock x:Name="PART_text" Text="{TemplateBinding Text}" IsEnabled="{TemplateBinding IsEnabled}" Margin="0,2,0,0" TextAlignment="Center"
+                                       HorizontalAlignment="Center" VerticalAlignment="Stretch" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" MaxWidth="{TemplateBinding MaxWidth}" MaxHeight="{TemplateBinding MaxWidth}" />
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="ShowText" Value="false">
+                          <Setter TargetName="PART_text" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource DisabledBackgroundBrush}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource DisabledBorderBrush}" />
+                            <Setter TargetName="PART_img" Property="Opacity" Value="0.5" />
+                            <Setter Property="Foreground" Value="{DynamicResource DisabledForegroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="true">
+                          <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource DefaultedBorderBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                          <Setter TargetName="Border" Property="Background" Value="{DynamicResource NormalBrush}" />
+                          <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                          <Setter TargetName="Border" Property="Background" Value="{DynamicResource PressedBrush}" />
+                          <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource PressedBorderBrush}" />
+                        </Trigger>
+                        <Trigger Property="AlwaysShowBorder" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource NormalBrush}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="ToolbarToggleButton" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border x:Name="Border" Padding="3"
+                            CornerRadius="1" BorderThickness="1">
+                        <ContentPresenter/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource DisabledBackgroundBrush}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource DisabledBorderBrush}" />
+                            <Setter Property="Foreground" Value="{DynamicResource DisabledForegroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="true">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource DefaultedBorderBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource NormalBrush}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource PressedBrush}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource PressedBorderBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource PressedBrush}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource PressedBorderBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="StandaloneToolBarButton" TargetType="{x:Type loc:ImageButton}" BasedOn="{StaticResource {x:Type loc:ImageButton}}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type loc:ImageButton}">
+                    <Border x:Name="Border" Padding="3" CornerRadius="1" BorderThickness="1"
+                           Background="{DynamicResource NormalBrush}" BorderBrush="{DynamicResource NormalBorderBrush}">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Image x:Name="PART_img" Source="{TemplateBinding Image}" Stretch="None" SnapsToDevicePixels="True"
+                                   IsEnabled="{TemplateBinding IsEnabled}" />
+                            <TextBlock x:Name="PART_text" Text="{TemplateBinding Text}" IsEnabled="{TemplateBinding IsEnabled}" Margin="0,2,0,0" TextAlignment="Center"
+                                       HorizontalAlignment="Center" VerticalAlignment="Stretch" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" MaxWidth="{TemplateBinding MaxWidth}" MaxHeight="{TemplateBinding MaxWidth}" />
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="ShowText" Value="false">
+                            <Setter TargetName="PART_text" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource DisabledBackgroundBrush}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource DisabledBorderBrush}" />
+                            <Setter TargetName="PART_img" Property="Opacity" Value="0.5" />
+                            <Setter Property="Foreground" Value="{DynamicResource DisabledForegroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="true">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource DefaultedBorderBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource PressedBrush}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource PressedBorderBrush}" />
+                        </Trigger>
+                        <Trigger Property="AlwaysShowBorder" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource NormalBrush}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+  
+</ResourceDictionary>
