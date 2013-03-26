@@ -34,6 +34,8 @@ namespace CsvGrabber.Core
                 new XElement("grabexpression", this.GrabExpression),
                 new XElement("ignorewhitespace", this.GrabExpression.Options.HasFlag(RegexOptions.IgnorePatternWhitespace)),
                 new XElement("ignorecase", this.GrabExpression.Options.HasFlag(RegexOptions.IgnoreCase)),
+                new XElement("cultureinvariant", this.GrabExpression.Options.HasFlag(RegexOptions.CultureInvariant)),
+                new XElement("multiline", this.GrabExpression.Options.HasFlag(RegexOptions.Multiline)),
                 new XElement("singleline", this.GrabExpression.Options.HasFlag(RegexOptions.Singleline)),
                 new XElement("url", this.Url));
             return ele.ToString();
@@ -48,6 +50,12 @@ namespace CsvGrabber.Core
             bool ignoreCase = Convert.ToBoolean(ele.Element("ignorecase").Value);
             if (ignoreCase)
                 opts |= RegexOptions.IgnoreCase;
+            bool cultureinvariant = Convert.ToBoolean(ele.Element("cultureinvariant").Value);
+            if (cultureinvariant)
+                opts |= RegexOptions.CultureInvariant;
+            bool multiline = Convert.ToBoolean(ele.Element("multiline").Value);
+            if (multiline)
+                opts |= RegexOptions.Multiline;
             bool singleline = Convert.ToBoolean(ele.Element("singleline").Value);
             if (singleline)
                 opts |= RegexOptions.Singleline;

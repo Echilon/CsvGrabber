@@ -157,14 +157,14 @@ namespace CsvGrabber
                         Directory.CreateDirectory(logDirectory);
                     switch (e.Job.ScheduledGrab.GrabMode) {
                         case Constants.GrabModes.Regex:
-                            string logFilePath = System.IO.Path.Combine(logDirectory, DateTime.Now.ToString("yyyy-MM-ddTHHmm") + ".csv");
-                            CSVExporter exporter = new CSVExporter(logFilePath, _config.AppendLogFile) { IncludeRawResponse = _config.LogRawResponse };
+                            string logFilePath = System.IO.Path.Combine(logDirectory, string.Format("{0}-{1:yyyy-MM-ddTHHmm}.csv", Utils.SanitizeFileName(e.Job.ScheduledGrab.Name), DateTime.Now));
+                            CSVExporter exporter = new CSVExporter(logFilePath, _config.AppendLogFile) { IncludeRawResponse = _config.LogRawResponse, TrimExtraWhitespace = _config.TrimExtraWhitespace };
                             exporter.Save(e.Job.Response);
                             break;
                         case Constants.GrabModes.Scrape:
                             //todo: test-untested
-                            string dumpPath= System.IO.Path.Combine(logDirectory, DateTime.Now.ToString("yyyy-MM-ddTHHmm")+e.Job.ScheduledGrab.Name);
-                                File.WriteAllBytes(dumpPath,e.Job.Response.BinaryResponse);
+                            string dumpPath = System.IO.Path.Combine(logDirectory, string.Format("{0}-{1:yyyy-MM-ddTHHmm}.csv", Utils.SanitizeFileName(e.Job.ScheduledGrab.Name), DateTime.Now));
+                            File.WriteAllBytes(dumpPath, e.Job.Response.BinaryResponse);
                             break;
                     }
                 }

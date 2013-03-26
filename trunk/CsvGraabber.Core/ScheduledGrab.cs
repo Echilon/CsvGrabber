@@ -14,6 +14,7 @@ namespace CsvGrabber.Core
         private bool _isActive;
         private Constants.GrabSchedules _grabSchedule;
         private Constants.GrabModes _grabMode;
+        private Constants.GrabSource _grabSource;
         private GrabEventArgs _grabParams;
 
         public int GrabID {
@@ -61,7 +62,18 @@ namespace CsvGrabber.Core
             }
         }
 
-        public Constants.GrabModes GrabMode {
+        public Constants.GrabSource GrabSource
+        {
+            get { return _grabSource; }
+            set
+            {
+                _grabSource = value;
+                OnPropertyChanged("GrabSource");
+            }
+        }
+
+        public Constants.GrabModes GrabMode
+        {
             get { return _grabMode; }
             set
             {
@@ -89,6 +101,7 @@ namespace CsvGrabber.Core
             GrabParams = new GrabEventArgs();
             GrabSchedule = Constants.GrabSchedules.OneTime;
             GrabMode = Constants.GrabModes.Scrape;
+            GrabSource = Constants.GrabSource.Url;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -110,6 +123,7 @@ namespace CsvGrabber.Core
                            Interval = this.Interval,
                            IsActive = this.IsActive,
                            Name = this.Name,
+                           GrabSource=this.GrabSource
                        };
             return clone;
         }

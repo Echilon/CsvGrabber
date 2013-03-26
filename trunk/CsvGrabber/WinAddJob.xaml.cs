@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -14,6 +15,8 @@ using System.Windows.Shapes;
 using CsvGrabber.Core;
 using CsvGrabber.Properties;
 using Lime49.UI;
+
+using ComboBox = System.Windows.Controls.ComboBox;
 
 namespace CsvGrabber
 {
@@ -31,8 +34,10 @@ namespace CsvGrabber
             if(newGrab==null||newGrab.GrabParams==null||newGrab.GrabParams.GrabExpression==null)
                 return;
             ctl.chkFreeSpacing.IsChecked = (newGrab.GrabParams.GrabExpression.Options.HasFlag(RegexOptions.IgnorePatternWhitespace));
+            ctl.chkMultiline.IsChecked = (newGrab.GrabParams.GrabExpression.Options.HasFlag(RegexOptions.Multiline));
             ctl.chkDotNewLine.IsChecked = (newGrab.GrabParams.GrabExpression.Options.HasFlag(RegexOptions.Singleline));
             ctl.chkCaseInsensitive.IsChecked = (newGrab.GrabParams.GrabExpression.Options.HasFlag(RegexOptions.IgnoreCase));
+            ctl.chkCultureInvariant.IsChecked = (newGrab.GrabParams.GrabExpression.Options.HasFlag(RegexOptions.CultureInvariant));
             ctl.cboExpressions.GetBindingExpression(ComboBox.TextProperty).UpdateTarget();
         }
 
@@ -60,6 +65,7 @@ namespace CsvGrabber
         private void Window_Loaded(object sender, RoutedEventArgs e) {
             lstGrabSchedule.ItemsSource = Enum.GetNames(typeof(Constants.GrabSchedules));
             lstGrabMode.ItemsSource = Enum.GetNames(typeof(Constants.GrabModes));
+            lstGrabSource.ItemsSource = Enum.GetNames(typeof(Constants.GrabSource));
             try {
                 string serializedGrabExpressions = Settings.Default.GrabExpressions;
                 IEnumerable<string> grabExpressions = CsvGrabber.Core.Utils.DeserializeList(serializedGrabExpressions);
@@ -82,6 +88,25 @@ namespace CsvGrabber
                 Console.WriteLine("Error loading saved expression list: " + ex.Message);
                 Settings.Default.GrabExpressions = CsvGrabber.Core.Utils.SerializeList(new string[0]);
             }
+            this.lstGrabMode_SelectionChanged(this, null);
+            this.lstGrabSchedule_SelectionChanged(this, null);
+            this.lstGrabSource_SelectionChanged(this, null);
+        }
+
+        private void BrowseForFolder(object sender, ExecutedRoutedEventArgs e) {
+            var dlg = new OpenFileDialog()
+            {
+                DefaultExt = ".htm",
+                Filter = "All Files|*.*|HTML|*.htm",
+                FilterIndex = 1,
+                Title = "Browse",
+                FileName = txtFilename.Text,
+                ValidateNames = false,
+                CheckPathExists = true
+            };
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                txtFilename.Text = dlg.FileName;
+            }
         }
 
         /// <summary>
@@ -96,7 +121,26 @@ namespace CsvGrabber
             Constants.GrabModes selectedGrabMode = (Constants.GrabModes)Enum.Parse(typeof(Constants.GrabModes), Convert.ToString(lstGrabMode.SelectedValue ?? Constants.GrabModes.Regex.ToString()), true);
             switch (selectedGrabMode) {
                 case Constants.GrabModes.Regex:
-                    tbcWizard.SelectedIndex = tbcWizard.Items.IndexOf(tabGrabRegex);
+                    tbcWizardMode.SelectedIndex = tbcWizardMode.Items.IndexOf(tabGrabRegex);
+                    break;
+                case Constants.GrabModes.Scrape:
+                default:
+                    tbcWizardMode.SelectedIndex = tbcWizardMode.Items.IndexOf(tabGrabScrape);
+                    break;
+            }
+        }
+
+        private void lstGrabSource_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!IsLoaded)
+                return;
+            Constants.GrabSource selectedSource = (Constants.GrabSource)Enum.Parse(typeof(Constants.GrabSource), Convert.ToString(lstGrabSource.SelectedValue ?? Constants.GrabSource.Url.ToString()), true);
+            switch (selectedSource) {
+                case Constants.GrabSource.Url:
+                    tbcWizardSource.SelectedIndex = tbcWizardSource.Items.IndexOf(tabSourceUrl);
+                    break;
+                case Constants.GrabSource.File:
+                    tbcWizardSource.SelectedIndex = tbcWizardSource.Items.IndexOf(tabSourceFile);
                     break;
             }
         }
@@ -176,11 +220,17 @@ namespace CsvGrabber
             Settings.Default.Save();
             GrabEventArgs args = new GrabEventArgs(new GrabbableUrl(txtUrl.Text));
             RegexOptions options = 0;
+            if (chkCultureInvariant.IsChecked == true) {
+                options |= RegexOptions.CultureInvariant;
+            }
             if (chkCaseInsensitive.IsChecked == true) {
                 options |= RegexOptions.IgnoreCase;
             }
             if (chkDotNewLine.IsChecked == true) {
                 options |= RegexOptions.Singleline;
+            }
+            if (chkMultiline.IsChecked == true) {
+                options |= RegexOptions.Multiline;
             }
             if (chkFreeSpacing.IsChecked == true) {
                 options |= RegexOptions.IgnorePatternWhitespace;

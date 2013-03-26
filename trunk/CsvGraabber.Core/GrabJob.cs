@@ -30,7 +30,7 @@ namespace CsvGrabber.Core
 
         public GrabJob() {
             Logger = new ConsoleLogger();
-            tmr= new Timer();
+            tmr = new Timer();
             tmr.Elapsed += new System.Timers.ElapsedEventHandler(tmr_Elapsed);
         }
 
@@ -60,30 +60,17 @@ namespace CsvGrabber.Core
                                     GrabResponse response = new GrabResponse();
                                     switch (ScheduledGrab.GrabMode) {
                                         case Constants.GrabModes.Regex:
+                                            response.RawResponse = GetStringContents(ScheduledGrab.GrabSource, grapParams.Url.Url);
                                             int numExtracted = 0;
-                                            
-                                            using(WebClient client = new WebClient())
-                                            using(Stream responseStream = client.OpenRead(grapParams.Url.Url))
-                                            using(StreamReader reader = new StreamReader(responseStream, Encoding.UTF8)) {
-                                                response.RawResponse = reader.ReadToEnd();
-                                            }
-                                            //Match match  = Arguments.GrabExpression.Match(response.RawResponse);
-                                            //foreach(Group group in match.Groups) {
                                             MatchCollection matches = grapParams.GrabExpression.Matches(response.RawResponse);
                                             foreach(Match match in matches) {
                                                 if(match.Success) {
-                                                    //List<string> matchedValues = new List<string>();
                                                     List<string> captures = new List<string>();
                                                     for(int i=1;i<match.Groups.Count;i++) {
                                                         Group matchGroup=match.Groups[i];
                                                         foreach(Capture capture in matchGroup.Captures) {
-                                                            // match.Captures) {
-                                                            //matchedValues.Add(matchGroup.Value);
                                                             captures.Add(capture.Value);
-                                                            //   response.ParsedResponse.Add(capture.Value);
-                                                            //todo: check whether .captures is needed instead
                                                         }
-                                                        //Console.Write(captures);
                                                     }
                                                     response.ParsedResponse.Add(captures);
                                                     numExtracted++;
@@ -94,18 +81,8 @@ namespace CsvGrabber.Core
                                             Logger.Log(string.Format("Extracted {0} matches from {1}", numExtracted, grapParams.Url.Url));
                                             break;
                                         case Constants.GrabModes.Scrape:
-                                            byte[] buffer = new byte[1024];
-                                            int read;
-                                            using (WebClient client = new WebClient())
-                                            using (Stream responseStream = client.OpenRead(grapParams.Url.Url))
-                                            using (BinaryReader reader = new BinaryReader(responseStream, Encoding.UTF8)) 
-                                            using (MemoryStream ms = new MemoryStream()) {
-                                                while ((read = reader.Read(buffer, 0, buffer.Length)) > 0) {
-                                                    ms.Write(buffer, 0, read);
-                                                }
-                                                response.BinaryResponse = ms.ToArray();
-                                                Logger.Log(string.Format("Extracted page content from {0} - {1} bytes", grapParams.Url.Url, ms.Length));
-                                            }
+                                            response.BinaryResponse = GetBinaryContents(ScheduledGrab.GrabSource, grapParams.Url.Url);
+                                            Logger.Log(string.Format("Extracted page content from {0} - {1} bytes", grapParams.Url.Url, response.BinaryResponse.Length));
                                             break;
                                     }
                                 } catch(Exception ex) {
@@ -135,6 +112,53 @@ namespace CsvGrabber.Core
             };
             IsBusy = true;
             worker.RunWorkerAsync();
+        }
+
+        /// <summary>
+        /// Gets the binary contents.
+        /// </summary>
+        /// <param name="grabSource">The grab source.</param>
+        /// <param name="url">The URL.</param>
+        /// <returns></returns>
+        private static byte[] GetBinaryContents(Constants.GrabSource grabSource, string url) {
+            var contents = new byte[0];
+            switch (grabSource) {
+                case Constants.GrabSource.Url:
+                    byte[] buffer = new byte[1024];
+                    int read;
+                    using (WebClient client = new WebClient())
+                    using (Stream responseStream = client.OpenRead(url))
+                    using (BinaryReader reader = new BinaryReader(responseStream, Encoding.UTF8))
+                    using (MemoryStream ms = new MemoryStream()) {
+                        while ((read = reader.Read(buffer, 0, buffer.Length)) > 0) {
+                            ms.Write(buffer, 0, read);
+                        }
+                        contents = ms.ToArray();
+                    }
+                    break;
+                case Constants.GrabSource.File:
+                    contents = File.ReadAllBytes(url);
+                    break;
+            }
+            return contents;
+        }
+
+        private static string GetStringContents(Constants.GrabSource grabSource, string url)
+        {
+            string contents = null;
+            switch (grabSource) {
+                case Constants.GrabSource.Url:
+                    using (WebClient client = new WebClient())
+                    using (Stream responseStream = client.OpenRead(url))
+                    using (StreamReader reader = new StreamReader(responseStream, Encoding.UTF8)) {
+                        contents = reader.ReadToEnd();
+                    }
+                    break;
+                case Constants.GrabSource.File:
+                    contents = File.ReadAllText(url);
+                    break;
+            }
+            return contents;
         }
 
         /// <summary>

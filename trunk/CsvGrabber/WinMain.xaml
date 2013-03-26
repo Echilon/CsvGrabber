@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:l49ui="clr-namespace:Lime49.UI;assembly=Lime49" 
     xmlns:loc="clr-namespace:CsvGrabber" 
-    xmlns:l49wpf="clr-namespace:Lime49.WPF;assembly=Lime49" 
+    xmlns:l49wpf="clr-namespace:Lime49.WPF;assembly=Lime49" Icon="/Resources/Images/icon_16.png"
     xmlns:props="clr-namespace:CsvGrabber.Properties" xmlns:conv="clr-namespace:CsvGrabber.Converters" Loaded="Window_Loaded"
     Title="CSV Grabber" Height="600" Width="500">
     <Window.CommandBindings>
@@ -133,6 +133,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="labels"/>
@@ -140,18 +141,20 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <CheckBox x:Name="chkLogFile" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Content="Log to Directory" IsChecked="{Binding Default.LogToFile,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-                <!--TextBox x:Name="txtFilePath" Grid.Row="0" Grid.Column="1"  ToolTip="Path to the output file"/-->
-                <ComboBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="cboFileName" IsEditable="True" ToolTip="Path to the output directory" Margin="0,2,2,2" IsEnabled="{Binding IsChecked,ElementName=chkLogFile}"/>
-                <Button x:Name="btnBrowse" Grid.Row="1" Grid.Column="2" MinWidth="70" Command="ApplicationCommands.Open" CommandTarget="{Binding ElementName=cboFileName}" Content="Browse..." IsEnabled="{Binding IsChecked,ElementName=chkLogFile}" />
+                <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" x:Name="chkTrimWhitespace" Content="Trim extra whitespace from fields" IsChecked="{Binding Default.TrimExtraWhitespace,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
 
-                <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" x:Name="chkIncludeResponse" Content="Include raw response for each match" IsChecked="{Binding Default.LogRawResponse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsChecked,ElementName=chkLogFile}" />
-                <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" x:Name="chkAppend" Content="Append to existing file" IsChecked="{Binding Default.AppendLogFile,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsChecked,ElementName=chkLogFile}" />
-
-                <CheckBox x:Name="chkLogDatabase" Grid.Row="4" Grid.Column="0" Content="Log to Database" IsChecked="{Binding Default.LogToDatabase,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                <CheckBox x:Name="chkLogFile" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Content="Log to Directory" IsChecked="{Binding Default.LogToFile,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                 <!--TextBox x:Name="txtFilePath" Grid.Row="0" Grid.Column="1"  ToolTip="Path to the output file"/-->
-                <ComboBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" x:Name="cboDbPath" ToolTip="Path to the database file" Margin="0,2,2,2" IsEnabled="{Binding IsChecked,ElementName=chkLogDatabase}" IsEditable="True"/>
-                <Button x:Name="btnBrowseDatabase" Grid.Row="5" Grid.Column="2" MinWidth="70" Command="ApplicationCommands.Open" CommandTarget="{Binding ElementName=cboDbPath}" Content="Browse..." IsEnabled="{Binding IsChecked,ElementName=chkLogDatabase}" />
+                <ComboBox Grid.Row="2" Grid.Column="1" x:Name="cboFileName" IsEditable="True" ToolTip="Path to the output directory" Margin="0,2,2,2" IsEnabled="{Binding IsChecked,ElementName=chkLogFile}"/>
+                <Button x:Name="btnBrowse" Grid.Row="2" Grid.Column="2" MinWidth="70" Command="ApplicationCommands.Open" CommandTarget="{Binding ElementName=cboFileName}" Content="Browse..." IsEnabled="{Binding IsChecked,ElementName=chkLogFile}" />
+
+                <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" x:Name="chkIncludeResponse" Content="Include raw response for each match" IsChecked="{Binding Default.LogRawResponse,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsChecked,ElementName=chkLogFile}" />
+                <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" x:Name="chkAppend" Content="Append to existing file" IsChecked="{Binding Default.AppendLogFile,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsChecked,ElementName=chkLogFile}" />
+
+                <CheckBox x:Name="chkLogDatabase" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Content="Log to Database" IsChecked="{Binding Default.LogToDatabase,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                <!--TextBox x:Name="txtFilePath" Grid.Row="0" Grid.Column="1"  ToolTip="Path to the output file"/-->
+                <ComboBox Grid.Row="6" Grid.Column="1" x:Name="cboDbPath" ToolTip="Path to the database file" Margin="0,2,2,2" IsEnabled="{Binding IsChecked,ElementName=chkLogDatabase}" IsEditable="True"/>
+                <Button x:Name="btnBrowseDatabase" Grid.Row="6" Grid.Column="2" MinWidth="70" Command="ApplicationCommands.Open" CommandTarget="{Binding ElementName=cboDbPath}" Content="Browse..." IsEnabled="{Binding IsChecked,ElementName=chkLogDatabase}" />
             </Grid>
         </GroupBox>
         <GroupBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Header="Log" Margin="6,0">

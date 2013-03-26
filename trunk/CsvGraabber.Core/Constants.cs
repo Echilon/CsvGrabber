@@ -45,5 +45,10 @@ namespace CsvGrabber.Core
             Success,
             Fail
         }
+
+        public enum GrabSource {
+            Url,
+            File
+        }
     }
 }

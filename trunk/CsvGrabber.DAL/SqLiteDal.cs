@@ -32,12 +32,13 @@ namespace CsvGrabber.DAL {
                             {
                                 using (SQLiteCommand cmd = conn.CreateCommand())
                                 {
-                                    cmd.CommandText = "INSERT INTO ScheduledGrabs (Interval, Name, IsActive, Schedule, Mode, Parameters) VALUES (@Interval, @Name, @IsActive, @Schedule, @Mode, @Parameters)";
+                                    cmd.CommandText = "INSERT INTO ScheduledGrabs (Interval, Name, IsActive, Schedule, Mode, Source, Parameters) VALUES (@Interval, @Name, @IsActive, @Schedule, @Mode, @Source, @Parameters)";
                                     cmd.Parameters.AddWithValue("@Interval", 0);
                                     cmd.Parameters.AddWithValue("@Name", string.Empty);
                                     cmd.Parameters.AddWithValue("@IsActive", false);
                                     cmd.Parameters.AddWithValue("@Schedule", 0);
                                     cmd.Parameters.AddWithValue("@Mode", 0);
+                                    cmd.Parameters.AddWithValue("@Source", 0);
                                     cmd.Parameters.AddWithValue("@Parameters", string.Empty);
 
                                     foreach (ScheduledGrab grab in grabs)
@@ -47,6 +48,7 @@ namespace CsvGrabber.DAL {
                                         cmd.Parameters["@IsActive"].Value = grab.IsActive;
                                         cmd.Parameters["@Schedule"].Value = grab.GrabSchedule;
                                         cmd.Parameters["@Mode"].Value = grab.GrabMode;
+                                        cmd.Parameters["@Source"].Value = grab.GrabSource;
                                         cmd.Parameters["@Parameters"].Value = grab.GrabParams.Serialize();
                                         cmd.ExecuteNonQuery();
                                     }
@@ -62,13 +64,14 @@ namespace CsvGrabber.DAL {
             {
                 using (SQLiteCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "UPDATE ScheduledGrabs SET Interval  = @Interval, Name = @Name, IsActive = @IsActive, Schedule = @Schedule, Mode = @Mode, Parameters = @Parameters WHERE GrabID = @GrabID";
+                    cmd.CommandText = "UPDATE ScheduledGrabs SET Interval  = @Interval, Name = @Name, IsActive = @IsActive, Schedule = @Schedule, Mode = @Mode, Source = @Source, Parameters = @Parameters WHERE GrabID = @GrabID";
                     cmd.Parameters.AddWithValue("@GrabID", grab.GrabID);
                     cmd.Parameters.AddWithValue("@Interval", grab.Interval);
                     cmd.Parameters.AddWithValue("@Name", grab.Name);
                     cmd.Parameters.AddWithValue("@IsActive", grab.IsActive);
                     cmd.Parameters.AddWithValue("@Schedule", grab.GrabSchedule);
                     cmd.Parameters.AddWithValue("@Mode", grab.GrabMode);
+                    cmd.Parameters.AddWithValue("@Source", grab.GrabSource);
                     cmd.Parameters.AddWithValue("@Parameters",grab.GrabParams.Serialize());
                     cmd.ExecuteNonQuery();
                 }
@@ -182,6 +185,7 @@ namespace CsvGrabber.DAL {
                 GrabID = Convert.ToInt32(reader["GrabID"]),
                 GrabParams = GrabEventArgs.Deserialize(Convert.ToString(reader["Parameters"])),
                 GrabMode = (Constants.GrabModes)Enum.Parse(typeof(Constants.GrabModes), Convert.ToString(reader["Mode"]), true),
+                GrabSource = (Constants.GrabSource)Enum.Parse(typeof(Constants.GrabSource), Convert.ToString(reader["Source"]), true),
                 GrabSchedule = (Constants.GrabSchedules)Enum.Parse(typeof(Constants.GrabSchedules), Convert.ToString(reader["Schedule"]), true),
                 Interval = Convert.ToInt32(reader["Interval"]),
                 IsActive = Convert.ToChar(reader["IsActive"]) == '1',
@@ -364,6 +368,7 @@ namespace CsvGrabber.DAL {
                             IsActive TEXT,
                             Schedule INTEGER,
                             Mode INTEGER,
+                            Source INTEGER,
                             IsArmed INT DEFAULT 1,
                             Parameters TEXT
                         );

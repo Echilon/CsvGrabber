@@ -20,6 +20,14 @@ namespace CsvGrabber.Core.Exporters
         public bool IncludeRawResponse { get; set; }
 
         /// <summary>
+        /// Gets or sets whether extra whitespace is trimmed for each field. This replaces double line breaks with single line breaks (\r\n\r\n -> \r\n).
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if extra whitespace is trimmed for each field, otherwise <c>false</c>.
+        /// </value>
+        public bool TrimExtraWhitespace { get; set; }
+
+        /// <summary>
         /// Saves the specified result set.
         /// </summary>
         /// <param name="response">The result set to save.</param>

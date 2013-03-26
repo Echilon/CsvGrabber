@@ -203,6 +203,20 @@ namespace CsvGrabber.Converters {
         }
     }
 
+    public class GrabSourceEnumConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+            if (value is Constants.GrabSource) {
+                return ((Constants.GrabSource)value).ToString();
+            } else {
+                return value;
+            }
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+            return string.IsNullOrWhiteSpace(value as string) ? Constants.GrabSource.Url : (Constants.GrabSource)Enum.Parse(typeof(Constants.GrabSource), System.Convert.ToString(value), true);
+        }
+    }
+
     public class ScheduledJobArmedStatusConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {

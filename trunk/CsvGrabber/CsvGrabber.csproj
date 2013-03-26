@@ -40,9 +40,8 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Lime49, Version=1.1.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lime49\trunk\bin\Release\Lime49.dll</HintPath>
+    <Reference Include="Lime49">
+      <HintPath>..\lib\Lime49.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
@@ -321,6 +320,7 @@
   <ItemGroup>
     <Content Include="lib\Lime49.dll" />
     <Content Include="lib\System.Data.SQLite.DLL" />
+    <Resource Include="Resources\Images\icon_16.png" />
     <Resource Include="Resources\Images\save_24.png" />
     <Resource Include="Resources\Images\grab_active_16.png" />
     <Resource Include="Resources\Images\grab_inactive_16.png" />

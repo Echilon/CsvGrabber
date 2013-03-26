@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Lime49">
-      <HintPath>..\..\..\Lime49\trunk\bin\Release\Lime49.dll</HintPath>
+      <HintPath>..\lib\Lime49.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />

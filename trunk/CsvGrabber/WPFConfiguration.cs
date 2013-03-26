@@ -21,6 +21,8 @@ namespace CsvGrabber {
 
         public bool LogToFile { get; set; }
 
+        public bool TrimExtraWhitespace { get; set; }
+
         public bool LogRawResponse { get; set; }
         public bool AppendLogFile { get; set; }
 
@@ -43,6 +45,7 @@ namespace CsvGrabber {
                 LogToDatabase = Settings.Default.LogToDatabase,
                 LogRawResponse = Settings.Default.LogRawResponse,
                 AppendLogFile = Settings.Default.AppendLogFile,
+                TrimExtraWhitespace=Settings.Default.TrimExtraWhitespace,
                 LogDbPath = Settings.Default.LogDbPath,
             };
             return config;

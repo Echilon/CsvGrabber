@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -119,6 +120,7 @@ namespace CsvGrabber
             txtFilePath.Text = Settings.Default.FilePath;*/
             chkLogDatabase.IsChecked = Settings.Default.LogToDatabase;
             chkLogFile.IsChecked = Settings.Default.LogToFile;
+            chkTrimWhitespace.IsChecked = Settings.Default.TrimExtraWhitespace;
             Settings.Default.Save();
         }
 
@@ -132,20 +134,23 @@ namespace CsvGrabber
 
         private void RefreshScheduledGrabs() {
             BackgroundWorker worker = new BackgroundWorker();
-            worker.DoWork += (s, dwe) => {
-                                 var db = new SqLiteDal();
-                                 dwe.Result =new object[]{ db.GetScheduledGrabs(null), db.GetTemplates()};
-                             };
-            worker.RunWorkerCompleted += (Fs, rwe) => {
-                                             if(rwe.Error != null) {
-                                                 DialogBox.ShowAlert(this, rwe.Error.Message, "Error");
-                                             } else
-                                             {
-                                                 object[] res = rwe.Result as object[];
-                                                 ScheduledGrabs = new ObservableCollection<ScheduledGrab>((List<ScheduledGrab>) res[0]);
-                                                 TemplatesProvider.ObjectInstance = new ObservableCollection<GrabTemplate>((List<GrabTemplate>) res[1]);
-                                             }
-                                         };
+            ObservableCollection<ScheduledGrab> grabs = null;
+            ObservableCollection<GrabTemplate> templates = null;
+            worker.DoWork += (s, dwe) =>
+                {
+                    var db = new SqLiteDal();
+                    grabs = new ObservableCollection<ScheduledGrab>(db.GetScheduledGrabs(null));
+                    templates = new ObservableCollection<GrabTemplate>(db.GetTemplates());
+                };
+            worker.RunWorkerCompleted += (Fs, rwe) =>
+                {
+                    if (rwe.Error != null) {
+                        DialogBox.ShowAlert(this, rwe.Error.Message, "Error");
+                    } else {
+                        ScheduledGrabs = grabs;
+                        TemplatesProvider.ObjectInstance = templates;
+                    }
+                };
             worker.RunWorkerAsync();
             WPFUtils.WaitForWorker(worker);
             CommandManager.InvalidateRequerySuggested();
@@ -457,6 +462,7 @@ namespace CsvGrabber
             };
             Settings.Default.LogToDatabase = chkLogDatabase.IsChecked == true;
             Settings.Default.LogToFile = chkLogFile.IsChecked == true;
+            Settings.Default.TrimExtraWhitespace = chkTrimWhitespace.IsChecked == true;
             Settings.Default.LogDbPath = cboDbPath.Text;
             Settings.Default.FilePath = CsvGrabber.Core.Utils.SerializeList(paths);
 
@@ -503,13 +509,13 @@ namespace CsvGrabber
                                      }
                                      if(_config.LogToFile) {
                                          string filePath= CsvGrabber.Core.Utils.DeserializeList(_config.FilePath).FirstOrDefault();
-                                         DirectoryInfo jobLogDir = new DirectoryInfo(System.IO.Path.Combine(filePath, e.Job.ScheduledGrab.Name));
-                                         if(!jobLogDir.Exists)
-                                             jobLogDir.Create();
+                                         DirectoryInfo jobLogDir = new DirectoryInfo(System.IO.Path.Combine(filePath, Core.Utils.SanitizeFileName(e.Job.ScheduledGrab.Name)));
+                                         if (!jobLogDir.Exists)
+                                             Directory.CreateDirectory(jobLogDir.FullName); //jobLogDir.Create();
                                          switch (e.Job.ScheduledGrab.GrabMode) {
                                              case Constants.GrabModes.Regex:
-                                                 string logPath = System.IO.Path.Combine(jobLogDir.FullName, DateTime.Now.ToString("yyyy-MM-ddTHHmm") + ".csv");
-                                                 CSVExporter exporter = new CSVExporter(logPath, _config.AppendLogFile) {IncludeRawResponse = _config.LogRawResponse};
+                                                 string logPath = System.IO.Path.Combine(jobLogDir.FullName, string.Format("{0:yyyy-MM-ddTHHmm}.csv", DateTime.Now));
+                                                 CSVExporter exporter = new CSVExporter(logPath, _config.AppendLogFile) {IncludeRawResponse = _config.LogRawResponse, TrimExtraWhitespace=_config.TrimExtraWhitespace};
                                                  exporter.Save(e.Job.Response);
                                                  break;
                                                  case Constants.GrabModes.Scrape:
@@ -517,7 +523,7 @@ namespace CsvGrabber
                                                  byte[] buffer = new byte[1024];
                                                  string fileName = System.IO.Path.GetFileNameWithoutExtension(e.Job.ScheduledGrab.GrabParams.Url.Url);
                                                  string extension = System.IO.Path.GetExtension(e.Job.ScheduledGrab.GrabParams.Url.Url);
-                                                 string outputFile = System.IO.Path.Combine(jobLogDir.FullName, fileName+"-"+DateTime.Now.ToString("yyyy-MM-ddTHHmm")+extension);
+                                                 string outputFile = System.IO.Path.Combine(jobLogDir.FullName, string.Format("{0}-{1:yyyy-MM-ddTHHmm}{2}", fileName, DateTime.Now, extension));
                                                  using (MemoryStream ms = new MemoryStream(e.Job.Response.BinaryResponse))
                                                  using(FileStream fs = new FileStream (outputFile, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite)){//= new BinaryWriter()) {
                                                      while ((read = ms.Read(buffer, 0, buffer.Length)) > 0) {
@@ -530,7 +536,8 @@ namespace CsvGrabber
                                  };
             saveWorker.RunWorkerCompleted += (Fs, rwe) => {
                                                  if(rwe.Error != null) {
-                                                     DialogBox.ShowAlert(this, rwe.Error.Message, "Error Saving Job Results");
+                                                     Dispatcher.BeginInvoke(new ThreadStart(() =>
+                                                         { DialogBox.ShowAlert(this, rwe.Error.Message, "Error Saving Job Results"); }));
                                                  }
                                              };
             saveWorker.RunWorkerAsync();
